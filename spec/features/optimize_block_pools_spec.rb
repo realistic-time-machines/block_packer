@@ -22,7 +22,8 @@ RSpec.describe OptimizeBlockPoolz do
 
   describe '#just_do_it!' do
     it 'normalizes the size of each block pool'
-    it 'maximizes the fitness for each block pool' do
+
+    it 'minimizes suckiness for each block pool' do
       origin_a = [37.7641255,-122.4712481]
       origin_b = [40.662097,-73.9506997]
       range = 0.01
@@ -38,8 +39,11 @@ RSpec.describe OptimizeBlockPoolz do
       pool_b = BlockPool.new(time_blocks: blocks_for_pool_b)
       subject = OptimizeBlockPoolz.new(poolz: [pool_a, pool_b])
       subject.just_do_it!
-      expect(subject.poolz)
-        .to match_array([location_a_time_blocks, location_b_time_blocks])
+
+      expect(subject.poolz).to match [
+        BlockPool.new(time_blocks:location_a_time_blocks),
+        BlockPool.new(time_blocks:location_b_time_blocks)
+      ]
     end
   end
 end

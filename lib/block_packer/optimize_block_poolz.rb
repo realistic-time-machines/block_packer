@@ -11,13 +11,13 @@ class OptimizeBlockPoolz
     number_of_poolz = poolz.length
     all_combinations = all_time_blocks.combination(number_of_blocks)
 
-    all_combinations.each do |combination|
+    scores = all_combinations.map do |combination|
       slice_size = number_of_blocks / number_of_poolz
       new_block_pool = ->(s) { BlockPool.new time_blocks: s }
       test_poolz = combination.each_slice(slice_size).map &new_block_pool
-      test_poolz.sum(&:twenty_four_hour_fitness)
+      test_poolz.reduce(0) { |a, e| a + e.suckiness }
     end
 
-    best_combinations = all_combinations.to_a[scores.index(scores.max)]
+    best_combinations = all_combinations.to_a[scores.index(scores.min)]
   end
 end
